@@ -133,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
         }.execute();
     }
 
+    
     private void getCatalogo() {
         compKeyList.clear();
         antaKeyList.clear();
