@@ -1,7 +1,12 @@
 package com.mob.schneiderpersson.agrohortav1;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,11 +26,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import android.os.Handler;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
     ListView lvList;
 
     HashMap<String, String> jsonMap = new HashMap<String, String>();
-    HashMap<String, String> listMap = new HashMap<String, String>();
     ArrayList<String> list = new ArrayList<String>();
     ArrayList<String> compList = new ArrayList<String>();
     ArrayList<String> antaList = new ArrayList<String>();
@@ -49,6 +59,27 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<String> compKeyList = new ArrayList<String>();
     ArrayList<String> antaKeyList = new ArrayList<String>();
     public boolean firstTime = true;
+
+    ArrayList<String> catalogoList = new ArrayList<>();
+
+    HashMap<Object, String> compMap = new HashMap<>();
+    HashMap<Object, String> antaMap = new HashMap<>();
+    HashMap<String, Object> listMap = new HashMap<>();
+
+    HashMap<Object, Object> objMap = new HashMap<>();
+    HashMap<Object, String> objMap2 = new HashMap<>();
+
+
+    public class IndexObj {
+        private String nome;
+        private Integer item;
+    }
+
+    public class ContentObj {
+        private String nome;
+        private String key;
+        private String tipo;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +93,50 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+
+        //register broadcast receiver for the intent MyTaskStatus
+        LocalBroadcastManager.getInstance(this).registerReceiver(MyReceiver, new IntentFilter("MyServiceStatus"));
+    }
+
+    //Defining broadcast receiver
+    private BroadcastReceiver MyReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            String message = "";//intent.getStringExtra("serviceMessage");
+            catalogoList = intent.getStringArrayListExtra("serviceMessage");
+
+            Toast.makeText(MainActivity.this, "Received : " + message, Toast.LENGTH_SHORT).show();
+
+            switch (message)
+            {
+                case "2":
+                    Intent intent2 = new Intent(getApplicationContext(), MyService.class);
+                    intent2.putExtra("id", 2);
+                    intent2.putExtra("msg", "hi");
+                    startService(intent2);
+                    Toast.makeText(MainActivity.this, "Started 2", Toast.LENGTH_SHORT).show();
+                    break;
+                case "DONE":
+                    Toast.makeText(MainActivity.this, "DONE!!!!", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    };
+
+    @Override
     protected void onResume() {
         super.onResume();
         initialize();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(MyReceiver);
     }
 
     private void initialize() {
@@ -84,8 +156,18 @@ public class MainActivity extends AppCompatActivity {
 
     public void btGetData_onCLick(View view) {
         convertInputText();
-        setInputList();
-        getDataInput();
+
+        Intent intent = new Intent(getApplicationContext(), MyService.class);
+
+        intent.putExtra("id", 1);
+        intent.putExtra("msg", "hi");
+
+        //starting service
+        startService(intent);
+
+
+        //setInputList();
+        //getDataInput();
 
 
         //loadAsyncTaskForGetData();
@@ -109,9 +191,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             protected Integer doInBackground(String... params) {
                 getCatalogo();
-                //getInputCompanheiras();
-                //getInputAntagonicas();
-                //mergeLists();
                 return 1;
             }
 
@@ -133,16 +212,33 @@ public class MainActivity extends AppCompatActivity {
         }.execute();
     }
 
-    
     private void getCatalogo() {
-        compKeyList.clear();
-        antaKeyList.clear();
-        final AtomicInteger index = new AtomicInteger();
-        index.set(0);
+        catalogoList.clear();
 
+        Log.i("LFSP", "getCatalogo - before BD");
         mDatabase.child("catalogo").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i("LFSP", "getCatalogo - Data Change");
+                for (DataSnapshot data : dataSnapshot.getChildren()) {
+                    catalogoList.add(data.getKey());
+                }
+                getCatalogoKey();
+                //loadList();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
+
+    private void getCatalogoKey() {
+        Log.i("LFSP", "getCatalogoKey - before DB");
+        mDatabase.child("catalogo").child("alface").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.i("LFSP", "getCatalogoKey - Data Change");
                 for (DataSnapshot Snapshot : dataSnapshot.getChildren()) {
                     Catalogo c = Snapshot.getValue(Catalogo.class);
 
@@ -151,9 +247,11 @@ public class MainActivity extends AppCompatActivity {
 
                     if (tipo.equals("C"))
                         compKeyList.add(key);
+
                     else
                         antaKeyList.add(key);
                 }
+                getAntagonicosFromDb();
             }
 
             @Override
@@ -161,6 +259,93 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void getAntagonicosFromDb() {
+        final AtomicInteger index = new AtomicInteger();
+        index.set(0);
+
+        for (String key : antaKeyList) {
+            if (key.equals(""))
+                continue;
+            Log.i("LFSP", "getAntagonicosFromDb - for before DB");
+            mDatabase.child("relAntagonicas").child(key).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Log.i("LFSP", "getAntagonicosFromDb - for Data CHange");
+                    int count = index.get();
+                    count = count + 1;
+                    index.lazySet(count);
+
+                    Relacionamento r = dataSnapshot.getValue(Relacionamento.class);
+                    String item1 = r.getItem1();
+                    String item2 = r.getItem2();
+
+                    antaList.add(item1);
+                    antaList.add(item2);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    int i = 10;
+                }
+            });
+        }
+        while (antaKeyList.size() != index.get()) {
+            continue;
+        }
+        getCompanheirasFromDB();
+    }
+
+    private void getCompanheirasFromDB(){
+        final AtomicInteger index = new AtomicInteger();
+        index.set(0);
+
+        for (String key : inputList) {
+            if (key.equals(""))
+                continue;
+            Log.i("LFSP", "getCompanheirasFromDB - for before DB");
+            mDatabase.child("relCompanheiras").child(key).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Log.i("LFSP", "getCompanheirasFromDB - for Data CHange");
+                    int count = index.get();
+                    count = count + 1;
+                    index.lazySet(count);
+
+                    Relacionamento r = dataSnapshot.getValue(Relacionamento.class);
+                    String item1 = r.getItem1();
+                    String item2 = r.getItem2();
+
+                    compList.add(item1);
+                    compList.add(item2);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+        while (inputList.size() != index.get()) {
+            continue;
+        }
+        updateCatalogoList();
+    }
+
+    private void updateCatalogoList() {
+        Log.i("LFSP", "updateCatalogoList");
+        //Remove itens duplicados
+        compList = new ArrayList<String>(new LinkedHashSet<String>(compList));
+        antaList = new ArrayList<String>(new LinkedHashSet<String>(antaList));
+
+        //Remove antagonicos
+        catalogoList.removeAll(antaList);
+
+        //ordenar lista por companheiros
+        Collections.sort(catalogoList);
+
+        loadList();
     }
 
     private void getCatalogo2() {
@@ -497,11 +682,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadList() {
+        Log.i("LFSP", "loadList");
         progressBar.setVisibility(View.GONE);
         btGetData.setVisibility(View.VISIBLE);
 
         ArrayAdapter<String> itemsAdapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, compList);
+                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, catalogoList);
 
         lvList = (ListView) findViewById(R.id.lvList);
         lvList.setAdapter(itemsAdapter);
