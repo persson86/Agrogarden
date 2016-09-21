@@ -534,7 +534,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             protected void onPostExecute(Integer integer) {
-                Toast.makeText(getApplicationContext(), "Post Execute!", Toast.LENGTH_SHORT).show();
             }
 
         }.execute();
@@ -589,7 +588,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             protected void onPostExecute(Integer integer) {
-                Toast.makeText(getApplicationContext(), "Post Execute!", Toast.LENGTH_SHORT).show();
             }
 
         }.execute();
@@ -624,14 +622,14 @@ public class MainActivity extends AppCompatActivity {
         mDatabase.child("catalogo").child(input1).push().setValue(jsonMap, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                Toast.makeText(getApplicationContext(), "Catalogo planta 1 Salvo!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Catalogo planta 1 Salvo!", Toast.LENGTH_SHORT).show();
             }
         });
 
         mDatabase.child("catalogo").child(input2).push().setValue(jsonMap, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-                Toast.makeText(getApplicationContext(), "Catalogo planta 2 Salvo!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "Catalogo planta 2 Salvo!", Toast.LENGTH_SHORT).show();
             }
         });
     }

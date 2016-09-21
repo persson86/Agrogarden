@@ -93,7 +93,6 @@ public class Main2Activity extends AppCompatActivity {
                     intent2.putExtra("id", 2);
                     intent2.putStringArrayListExtra("compKeyList", compKeyList);
                     startService(intent2);
-                    Toast.makeText(Main2Activity.this, "Started 2", Toast.LENGTH_SHORT).show();
                     break;
                 case "3":
                     compListAux = intent.getStringArrayListExtra("compList");
@@ -107,7 +106,6 @@ public class Main2Activity extends AppCompatActivity {
                     intent3.putExtra("id", 3);
                     intent3.putStringArrayListExtra("antaKeyList", antaKeyList);
                     startService(intent3);
-                    Toast.makeText(Main2Activity.this, "Started 3", Toast.LENGTH_SHORT).show();
                     break;
                 case "DONE":
                     antaListAux = intent.getStringArrayListExtra("antaList");
@@ -117,7 +115,6 @@ public class Main2Activity extends AppCompatActivity {
                         antaList.add(line);
                     }
 
-                    Toast.makeText(Main2Activity.this, "DONE!!!!", Toast.LENGTH_SHORT).show();
                     mergeLists();
                     break;
             }
@@ -239,12 +236,15 @@ public class Main2Activity extends AppCompatActivity {
         compList.removeAll(listInput);
         antaList.removeAll(listInput);
 
+        listCatalogoAux.clear();
+        listCatalogoAux.add("*******Companheiras******");
+
         for (String line : compList)
         {
             listCatalogoAux.add(line);
         }
 
-        listCatalogoAux.add("------------");
+        listCatalogoAux.add("*******Neutras******");
 
         for (String line : listCatalogo)
         {
