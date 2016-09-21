@@ -26,6 +26,9 @@ public class MyService extends IntentService {
     ArrayList<String> compKeyList = new ArrayList<String>();
     ArrayList<String> antaKeyList = new ArrayList<String>();
     ArrayList<String> genericList = new ArrayList<String>();
+    ArrayList<String> listInput = new ArrayList<>();
+
+    String plantaInput;
 
     DatabaseReference mDatabase;
 
@@ -39,18 +42,12 @@ public class MyService extends IntentService {
     protected void onHandleIntent(Intent intent) {
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        //retrieving data from the received intent
         int id = intent.getIntExtra("id", 0);
-        String message = intent.getStringExtra("msg");
 
-        Log.i("Data  ", "id : " + id + " message : " + message);
-        //-----------------------------------------------
-
-
-        //Do your long running task here
         Intent myIntent = new Intent("MyServiceStatus");
         switch (id) {
             case 1:
+                plantaInput = intent.getStringExtra("plantaInput");
                 getCatalogoKey();
                 break;
             case 2:
@@ -76,41 +73,8 @@ public class MyService extends IntentService {
 
     }
 
-    private void getCatalogo() {
-
-        //Firebase Reference
-
-        catalogoList.clear();
-
-        Log.i("LFSP", "getCatalogo - before BD");
-        mDatabase.child("catalogo").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.i("LFSP", "getCatalogo - Data Change");
-                for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    catalogoList.add(data.getKey());
-                }
-
-                //myIntent.putExtra("serviceMessage", "2");
-                //myIntent.putStringArrayListExtra("serviceMessage", catalogoList);
-
-                Bundle extras = new Bundle();
-                extras.putString("Message", "2");
-                extras.putStringArrayList("serviceMessage", catalogoList);
-                myIntent.putExtras(extras);
-
-                LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(myIntent);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-    }
-
     private void getCatalogoKey() {
-        String key = "alface";
-        mDatabase.child("catalogo").child(key).addValueEventListener(new ValueEventListener() {
+        mDatabase.child("catalogo").child(plantaInput).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot Snapshot : dataSnapshot.getChildren()) {
@@ -137,7 +101,6 @@ public class MyService extends IntentService {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                int ii = 10;
             }
         });
     }
@@ -167,7 +130,6 @@ public class MyService extends IntentService {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
                 }
             });
         }
@@ -209,7 +171,6 @@ public class MyService extends IntentService {
 
                 @Override
                 public void onCancelled(DatabaseError databaseError) {
-
                 }
             });
         }

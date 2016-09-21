@@ -59,16 +59,18 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:onClick="btGetData_onCLick"
-            android:text="Get Data" />
+            android:text="SIMULAR" />
 
         <TextView
             android:text="Lista Plantas Companheiras"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:visibility="invisible"/>
         <ListView
             android:id="@+id/lvList"
             android:layout_width="match_parent"
-            android:layout_height="200dp"></ListView>
+            android:layout_height="200dp"
+            android:visibility="invisible"></ListView>
 
     </LinearLayout>
 </ScrollView>

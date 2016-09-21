@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         mDatabase = FirebaseDatabase.getInstance().getReference();
         initialize();
-        loadAsyncTaskForGetDataInput();
+        //loadAsyncTaskForGetDataInput();
     }
 
     @Override

@@ -46,9 +46,6 @@ public class Main2Activity extends AppCompatActivity {
     ArrayList<String> compKeyList = new ArrayList<String>();
     ArrayList<String> antaKeyList = new ArrayList<String>();
 
-    ArrayList<String> catalogoList = new ArrayList<>();
-    ArrayList<String> catalogoListAux = new ArrayList<>();
-
     private DatabaseReference mDatabase;
 
     @Override
@@ -70,35 +67,55 @@ public class Main2Activity extends AppCompatActivity {
     private BroadcastReceiver MyReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            ArrayList<String> compListAux = new ArrayList<String>();
+            ArrayList<String> antaListAux = new ArrayList<String>();
+            ArrayList<String> compKeyListAux = new ArrayList<String>();
+            ArrayList<String> antaKeyListAux = new ArrayList<String>();
 
             String step = intent.getStringExtra("step");
-            //catalogoList = intent.getStringArrayListExtra("serviceMessage");
 
             switch (step)
             {
                 case "2":
-                    compKeyList = intent.getStringArrayListExtra("compKeyList");
-                    antaKeyList = intent.getStringArrayListExtra("antaKeyList");
+                    compKeyListAux = intent.getStringArrayListExtra("compKeyList");
+                    antaKeyListAux = intent.getStringArrayListExtra("antaKeyList");
+
+                    for (String line : compKeyListAux)
+                    {
+                        compKeyList.add(line);
+                    }
+                    for (String line : antaKeyListAux)
+                    {
+                        antaKeyList.add(line);
+                    }
 
                     Intent intent2 = new Intent(getApplicationContext(), MyService.class);
                     intent2.putExtra("id", 2);
-                    intent2.putExtra("msg", "hi");
                     intent2.putStringArrayListExtra("compKeyList", compKeyList);
                     startService(intent2);
                     Toast.makeText(Main2Activity.this, "Started 2", Toast.LENGTH_SHORT).show();
                     break;
                 case "3":
-                    compList = intent.getStringArrayListExtra("compList");
+                    compListAux = intent.getStringArrayListExtra("compList");
+
+                    for (String line : compListAux)
+                    {
+                        compList.add(line);
+                    }
 
                     Intent intent3 = new Intent(getApplicationContext(), MyService.class);
                     intent3.putExtra("id", 3);
-                    intent3.putExtra("msg", "hi");
                     intent3.putStringArrayListExtra("antaKeyList", antaKeyList);
                     startService(intent3);
                     Toast.makeText(Main2Activity.this, "Started 3", Toast.LENGTH_SHORT).show();
                     break;
                 case "DONE":
-                    antaList = intent.getStringArrayListExtra("antaList");
+                    antaListAux = intent.getStringArrayListExtra("antaList");
+
+                    for (String line : antaListAux)
+                    {
+                        antaList.add(line);
+                    }
 
                     Toast.makeText(Main2Activity.this, "DONE!!!!", Toast.LENGTH_SHORT).show();
                     mergeLists();
@@ -137,9 +154,6 @@ public class Main2Activity extends AppCompatActivity {
         if (plantaInput.length() > 0) {
             listInput.add(plantaInput);
 
-            etInput.setText("");
-            plantaInput = "";
-
             loadListInput();
 
             btAddPlanta.setVisibility(View.GONE);
@@ -148,7 +162,11 @@ public class Main2Activity extends AppCompatActivity {
             Intent intent = new Intent(getApplicationContext(), MyService.class);
             intent.putExtra("id", 1);
             intent.putExtra("msg", "hi");
+            intent.putExtra("plantaInput", plantaInput);
             startService(intent);
+
+            etInput.setText("");
+            plantaInput = "";
         }
     }
 
@@ -184,7 +202,7 @@ public class Main2Activity extends AppCompatActivity {
     }
 
     private void getCatalogo() {
-        catalogoList.clear();
+        listCatalogo.clear();
 
         mDatabase.child("catalogo").addValueEventListener(new ValueEventListener() {
             @Override
@@ -211,6 +229,8 @@ public class Main2Activity extends AppCompatActivity {
     }
 
     private void mergeLists() {
+        ArrayList<String> listCatalogoAux = new ArrayList<>();
+
         //Remove itens duplicados
         compList = new ArrayList<String>(new LinkedHashSet<String>(compList));
         antaList = new ArrayList<String>(new LinkedHashSet<String>(antaList));
@@ -219,23 +239,25 @@ public class Main2Activity extends AppCompatActivity {
         compList.removeAll(listInput);
         antaList.removeAll(listInput);
 
-        //Remove itens do input da lista e de antagonicas
-        listCatalogo.removeAll(listInput);
-        listCatalogo.removeAll(antaList);
-
         for (String line : compList)
         {
-            catalogoListAux.add(line);
+            listCatalogoAux.add(line);
         }
+
+        listCatalogoAux.add("------------");
 
         for (String line : listCatalogo)
         {
-            catalogoListAux.add(line);
+            listCatalogoAux.add(line);
         }
 
-        catalogoListAux = new ArrayList<String>(new LinkedHashSet<String>(catalogoListAux));
+        listCatalogoAux = new ArrayList<String>(new LinkedHashSet<String>(listCatalogoAux));
         listCatalogo.clear();
-        listCatalogo = catalogoListAux;
+        listCatalogo = listCatalogoAux;
+
+        //Remove itens do input da lista e de antagonicas
+        listCatalogo.removeAll(listInput);
+        listCatalogo.removeAll(antaList);
 
         loadListCatalogo();
     }
