@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean firstTime = true;
 
     ArrayList<String> catalogoList = new ArrayList<>();
+    ArrayList<String> catalogoListAux = new ArrayList<>();
 
     HashMap<Object, String> compMap = new HashMap<>();
     HashMap<Object, String> antaMap = new HashMap<>();
@@ -89,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         //Firebase Reference
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        //mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     @Override
@@ -105,22 +107,37 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-            String message = "";//intent.getStringExtra("serviceMessage");
-            catalogoList = intent.getStringArrayListExtra("serviceMessage");
+            String step = intent.getStringExtra("step");
+            //catalogoList = intent.getStringArrayListExtra("serviceMessage");
 
-            Toast.makeText(MainActivity.this, "Received : " + message, Toast.LENGTH_SHORT).show();
-
-            switch (message)
+            switch (step)
             {
                 case "2":
+                    compKeyList = intent.getStringArrayListExtra("compKeyList");
+                    antaKeyList = intent.getStringArrayListExtra("antaKeyList");
+
                     Intent intent2 = new Intent(getApplicationContext(), MyService.class);
                     intent2.putExtra("id", 2);
                     intent2.putExtra("msg", "hi");
+                    intent2.putStringArrayListExtra("compKeyList", compKeyList);
                     startService(intent2);
                     Toast.makeText(MainActivity.this, "Started 2", Toast.LENGTH_SHORT).show();
                     break;
+                case "3":
+                    compList = intent.getStringArrayListExtra("compList");
+
+                    Intent intent3 = new Intent(getApplicationContext(), MyService.class);
+                    intent3.putExtra("id", 3);
+                    intent3.putExtra("msg", "hi");
+                    intent3.putStringArrayListExtra("antaKeyList", antaKeyList);
+                    startService(intent3);
+                    Toast.makeText(MainActivity.this, "Started 3", Toast.LENGTH_SHORT).show();
+                    break;
                 case "DONE":
+                    antaList = intent.getStringArrayListExtra("antaList");
+
                     Toast.makeText(MainActivity.this, "DONE!!!!", Toast.LENGTH_SHORT).show();
+                    mergeLists();
                     break;
             }
         }
@@ -129,7 +146,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         initialize();
+        loadAsyncTaskForGetDataInput();
     }
 
     @Override
@@ -155,15 +174,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void btGetData_onCLick(View view) {
-        convertInputText();
+        Intent it;
+        it = new Intent(this, Main2Activity.class);
+        startActivity(it);
+        return;
 
-        Intent intent = new Intent(getApplicationContext(), MyService.class);
 
-        intent.putExtra("id", 1);
-        intent.putExtra("msg", "hi");
+        //btGetData.setVisibility(View.GONE);
+        //progressBar.setVisibility(View.VISIBLE);
+
+        //convertInputText();
+
+        //Intent intent = new Intent(getApplicationContext(), MyService.class);
+
+        //intent.putExtra("id", 1);
+        //intent.putExtra("msg", "hi");
 
         //starting service
-        startService(intent);
+        //startService(intent);
 
 
         //setInputList();
@@ -223,8 +251,8 @@ public class MainActivity extends AppCompatActivity {
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
                     catalogoList.add(data.getKey());
                 }
-                getCatalogoKey();
-                //loadList();
+                //getCatalogoKey();
+                loadList();
             }
 
             @Override
@@ -442,47 +470,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void mergeLists() {
-        if (firstTime) {
-            //Remove itens duplicados
-            compList = new ArrayList<String>(new LinkedHashSet<String>(compList));
-            antaList = new ArrayList<String>(new LinkedHashSet<String>(antaList));
+        inputList.clear();
+        inputList.add("alface");
 
-            //Remove itens do input da lista
-            compList.removeAll(inputList);
-            antaList.removeAll(inputList);
+        //Remove itens duplicados
+        compList = new ArrayList<String>(new LinkedHashSet<String>(compList));
+        antaList = new ArrayList<String>(new LinkedHashSet<String>(antaList));
 
-            //Remove itens da lista companheiros que existam na lista de antagonicos
-            compList.removeAll(antaList);
+        //Remove itens do input da lista
+        compList.removeAll(inputList);
+        antaList.removeAll(inputList);
 
-            antaList.clear();
-            inputList.clear();
+        //Remove itens do input da lista e de antagonicas
+        catalogoList.removeAll(inputList);
+        catalogoList.removeAll(antaList);
 
-            if (inputListAux.size() == 1) {
-                loadList();
-                input1 = "";
-                input2 = "";
-                return;
-            }
-
-
-            firstTime = false;
-            for (String line : compList) {
-                inputList.add(line);
-            }
-            getDataInput();
-        } else {
-            //Remove itens duplicados
-            compList = new ArrayList<String>(new LinkedHashSet<String>(compList));
-            antaList = new ArrayList<String>(new LinkedHashSet<String>(antaList));
-
-            //Remove itens da lista companheiros que existam na lista de antagonicos
-            compList.removeAll(antaList);
-            compList.removeAll(inputListAux);
-            Toast.makeText(this, "testeeeee", Toast.LENGTH_SHORT).show();
-            loadList();
-            input1 = "";
-            input2 = "";
+        for (String line : compList)
+        {
+            catalogoListAux.add(line);
         }
+
+        for (String line : catalogoList)
+        {
+            catalogoListAux.add(line);
+        }
+
+        catalogoListAux = new ArrayList<String>(new LinkedHashSet<String>(catalogoListAux));
+        catalogoList.clear();
+        catalogoList = catalogoListAux;
+
+        loadList();
     }
 
     //-------------------------------old but gold
