@@ -26,7 +26,7 @@
 
     <Button
         android:id="@+id/btAddPlanta"
-        android:text="Add Planta"
+        android:text="Filtrar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"

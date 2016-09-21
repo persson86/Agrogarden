@@ -25,6 +25,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 
@@ -239,12 +240,16 @@ public class Main2Activity extends AppCompatActivity {
         listCatalogoAux.clear();
         listCatalogoAux.add("*******Companheiras******");
 
+        Collections.sort(compList);
+
         for (String line : compList)
         {
             listCatalogoAux.add(line);
         }
 
         listCatalogoAux.add("*******Neutras******");
+
+        Collections.sort(listCatalogo);
 
         for (String line : listCatalogo)
         {
@@ -258,6 +263,8 @@ public class Main2Activity extends AppCompatActivity {
         //Remove itens do input da lista e de antagonicas
         listCatalogo.removeAll(listInput);
         listCatalogo.removeAll(antaList);
+
+        //Collections.sort(listCatalogo);
 
         loadListCatalogo();
     }
