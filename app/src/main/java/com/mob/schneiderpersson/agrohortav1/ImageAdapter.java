@@ -1,16 +1,75 @@
 package com.mob.schneiderpersson.agrohortav1;
 
 import android.content.Context;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Interpolator;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-/**
- * Created by Catarina Dev on 21/09/2016.
- */
+import java.util.ArrayList;
+import java.util.HashMap;
 
+public class ImageAdapter extends BaseAdapter {
+    private Context context;
+    //private final int item_image[];
+    //private final String item_text[];
+
+    private final ArrayList<Integer> img = new ArrayList<>();
+    private ArrayList<String> nameList = new ArrayList<>();
+
+    public ImageAdapter(Context context, ArrayList<String> name) {
+        this.context = context;
+        //this.img = img;
+        nameList = name;
+    }
+
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        View gridView;
+
+        if (convertView == null) {
+            gridView = new View(context);
+
+            // get layout from custom_gridview.xml
+            gridView = inflater.inflate(R.layout.custom_gridview, null);
+
+/*            // set value into imageview
+            ImageView image = (ImageView) gridView.findViewById(R.id.item_image);
+            image.setImageResource(img.get(position));*/
+
+            // set value into textview
+            TextView text = (TextView) gridView.findViewById(R.id.item_text);
+            text.setText(nameList.get(position));
+        } else {
+            gridView = (View) convertView;
+        }
+
+        return gridView;
+    }
+
+    @Override
+    public int getCount() {
+        return nameList.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return null;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return 0;
+    }
+}
+
+/*
 public class ImageAdapter extends BaseAdapter {
     private Context mContext;
 
@@ -36,9 +95,9 @@ public class ImageAdapter extends BaseAdapter {
         if (convertView == null) {
             // if it's not recycled, initialize some attributes
             imageView = new ImageView(mContext);
-            imageView.setLayoutParams(new GridView.LayoutParams(300, 300));
+            imageView.setLayoutParams(new GridView.LayoutParams(340, 400));
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-            imageView.setPadding(8, 8, 8, 8);
+            imageView.setPadding(0, 5, 0, 5);
         } else {
             imageView = (ImageView) convertView;
         }
@@ -49,16 +108,35 @@ public class ImageAdapter extends BaseAdapter {
 
     // references to our images
     private Integer[] mThumbIds = {
-            R.drawable.sample_2, R.drawable.sample_3,
-            R.drawable.sample_4, R.drawable.sample_5,
-            R.drawable.sample_6, R.drawable.sample_7,
-            R.drawable.sample_0, R.drawable.sample_1,
-            R.drawable.sample_2, R.drawable.sample_3,
-            R.drawable.sample_4, R.drawable.sample_5,
-            R.drawable.sample_6, R.drawable.sample_7,
-            R.drawable.sample_0, R.drawable.sample_1,
-            R.drawable.sample_2, R.drawable.sample_3,
-            R.drawable.sample_4, R.drawable.sample_5,
-            R.drawable.sample_6, R.drawable.sample_7
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela,
+            R.drawable.img_hortela, R.drawable.img_hortela
     };
 }
+*/
