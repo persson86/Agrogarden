@@ -85,6 +85,7 @@ public class Main3Activity extends AppCompatActivity {
 
         for (String line:listCatalogo)
         {
+
             listName.add(line);
             listImage.add(R.drawable.img_hortela);
         }
