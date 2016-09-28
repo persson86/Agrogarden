@@ -54,6 +54,7 @@ public class Main2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        Toast.makeText(this, "ok!!", Toast.LENGTH_SHORT).show();
     }
 
     @Override
