@@ -1,3 +1,50 @@
 <resources>
     <string name="app_name">AgroHortaV1</string>
+
+    <string name="p0">abobrinha</string>
+    <string name="p1">abóbora</string>
+    <string name="p2">acelga</string>
+    <string name="p3">agrião</string>
+    <string name="p4">alecrim</string>
+    <string name="p5">alface</string>
+    <string name="p6">alho poró</string>
+    <string name="p7">amendoim</string>
+    <string name="p8">batata inglesa</string>
+    <string name="p9">berinjela</string>
+    <string name="p10">beterraba</string>
+    <string name="p11">camomila</string>
+    <string name="p12">cebola</string>
+    <string name="p13">cebolinha</string>
+    <string name="p14">cenoura</string>
+    <string name="p15">chicória</string>
+    <string name="p16">coentro</string>
+    <string name="p17">couve</string>
+    <string name="p18">couve-flor</string>
+    <string name="p19">ervilha</string>
+    <string name="p20">espinafre</string>
+    <string name="p21">feijão</string>
+    <string name="p22">feijão-vagem</string>
+    <string name="p23">framboesa</string>
+    <string name="p24">girassol</string>
+    <string name="p25">hortelã</string>
+    <string name="p26">manjerona</string>
+    <string name="p27">maçã</string>
+    <string name="p28">milho</string>
+    <string name="p29">moranga</string>
+    <string name="p30">morango</string>
+    <string name="p31">mostarda</string>
+    <string name="p32">nabo</string>
+    <string name="p33">pepino</string>
+    <string name="p34">quiabo</string>
+    <string name="p35">rabanete</string>
+    <string name="p36">radite</string>
+    <string name="p37">repolho</string>
+    <string name="p38">rúcula</string>
+    <string name="p39">salsa</string>
+    <string name="p40">salsão</string>
+    <string name="p41">sálvia</string>
+    <string name="p42">tomate</string>
+    <string name="p43">tomilho</string>
+    <string name="p44">vagem</string>
 </resources>
+

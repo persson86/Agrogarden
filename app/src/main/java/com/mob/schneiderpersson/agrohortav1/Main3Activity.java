@@ -71,6 +71,9 @@ public class Main3Activity extends AppCompatActivity {
         //gridview.setAdapter(new ImageAdapter(this));
 
         grid = (GridView)findViewById(R.id.simpleGrid);
+        //ImageAdapter imageAdapter = new ImageAdapter(this, listCatalogo);
+        //grid.setAdapter(imageAdapter);
+
         /*grid.setAdapter(new ImageAdapter(this,image,text));
 
         grid.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -79,6 +82,9 @@ public class Main3Activity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(),text[position],Toast.LENGTH_LONG).show();
             }
         });*/
+
+        loadCatalogo();
+
     }
 
     private void loadCatalogo(){

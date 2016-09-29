@@ -5,7 +5,7 @@ public class Catalogo {
 
     public Catalogo(){}
 
-    public Catalogo(String nome, String key, String tipo)
+    public Catalogo(String key, String tipo)
     {
         key = key;
         tipo = tipo;
