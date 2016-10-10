@@ -26,9 +26,8 @@
             android:enabled="true"
             android:exported="false" />
 
-        <activity android:name=".Main2Activity"></activity>
-        <activity android:name=".Main3Activity">
-        </activity>
+        <activity android:name=".Main2Activity" />
+        <activity android:name=".Main3Activity" />
         <activity android:name=".FirstActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
