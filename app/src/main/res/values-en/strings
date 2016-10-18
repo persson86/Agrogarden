@@ -1,0 +1,53 @@
+<resources>
+    <string name="app_name">Agrogarden</string>
+    <string name="monte_sua_horta">Set up your garden</string>
+    <string name="buscando_plantas">Getting plants</string>
+    <string name="aguarde">Wait...</string>
+
+    <string name="abobrinha">Zucchini</string>
+    <string name="abóbora">Pumpkin</string>
+    <string name="acelga">Napa cabbage</string>
+    <string name="agrião">Watercress</string>
+    <string name="alecrim">Rosemary</string>
+    <string name="alface">Lettuce</string>
+    <string name="alho_poró">Leek</string>
+    <string name="amendoim">Peanut</string>
+    <string name="batata_inglesa">Potato</string>
+    <string name="berinjela">Eggplant</string>
+    <string name="beterraba">Beet</string>
+    <string name="camomila">Chamomile</string>
+    <string name="cebola">Onion</string>
+    <string name="cebolinha">Green onion</string>
+    <string name="cenoura">Carrot</string>
+    <string name="chicória">Chicory</string>
+    <string name="coentro">Coriander</string>
+    <string name="couve">Collard greens</string>
+    <string name="couve_flor">Cauliflower</string>
+    <string name="ervilha">Snow pea</string>
+    <string name="espinafre">Spinach</string>
+    <string name="feijão">Bean</string>
+    <string name="feijão_vagem">Bean-pod</string>
+    <string name="framboesa">Raspberry</string>
+    <string name="girassol">Sunflower</string>
+    <string name="hortelã">Mint</string>
+    <string name="manjerona">Marjoram</string>
+    <string name="maça">Apple</string>
+    <string name="milho">Corn</string>
+    <string name="moranga">Winter squash</string>
+    <string name="morango">Strawberry</string>
+    <string name="mostarda">Mustard</string>
+    <string name="nabo">Turnip</string>
+    <string name="pepino">Cucumber</string>
+    <string name="quiabo">Okra</string>
+    <string name="rabanete">Radish</string>
+    <string name="radite">Radite</string>
+    <string name="repolho">Cabbage</string>
+    <string name="rúcula">Rucola</string>
+    <string name="salsa">Salsa</string>
+    <string name="salsão">Celery</string>
+    <string name="sálvia">Salvia</string>
+    <string name="tomate">Tomato</string>
+    <string name="tomilho">Thyme</string>
+    <string name="vagem">Green beans</string>
+</resources>
+
