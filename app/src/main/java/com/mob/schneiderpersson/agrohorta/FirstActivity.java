@@ -73,6 +73,15 @@ public class FirstActivity extends AppCompatActivity {
     @ViewById
     ProgressBar progressBarCatalogo;
 
+    @ViewById
+    LinearLayout itensBox;
+
+    @ViewById
+    LinearLayout sentenceBox;
+
+    @ViewById
+    LinearLayout llCatalogo;
+
     @AfterViews
     void init() {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -338,6 +347,12 @@ public class FirstActivity extends AppCompatActivity {
         plantCatalogoAdapter.notifyDataSetChanged();
         gvList.setAdapter(plantCatalogoAdapter);
 
+        //int gridHeight = gvList.getMeasuredHeight();
+        //gridHeight = 1600;
+
+        //if (gridHeight > 0)
+          //  llCatalogo.setMinimumHeight(gridHeight);
+
         plantBoxAdapter = new PlantAdapter(this, listBox, listColor);
         plantBoxAdapter.notifyDataSetChanged();
         gvBox.setAdapter(plantBoxAdapter);
@@ -359,6 +374,11 @@ public class FirstActivity extends AppCompatActivity {
 
                 addFilter(inputPlant);
                 catalogoManager(position, inputPlant);
+
+                if (itensBox.getVisibility() == View.GONE) {
+                    itensBox.setVisibility(View.VISIBLE);
+                    sentenceBox.setVisibility(View.GONE);
+                }
             }
         });
 
@@ -381,8 +401,11 @@ public class FirstActivity extends AppCompatActivity {
                 Collections.sort(listCatalogo);
 
                 if (listBox.size() > 0) {
-                    tvTitle.setVisibility(View.GONE);
+                    itensBox.setVisibility(View.VISIBLE);
+                    sentenceBox.setVisibility(View.GONE);
                 } else {
+                    itensBox.setVisibility(View.GONE);
+                    sentenceBox.setVisibility(View.VISIBLE);
                     tvTitle.setVisibility(View.VISIBLE);
                 }
 
